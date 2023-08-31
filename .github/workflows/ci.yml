@@ -19,7 +19,7 @@ jobs:
           echo "PATH=$JAVA_HOME/bin:$PATH" >> $GITHUB_ENV
     
       - name: Build with Maven
-        run: C:/apache-maven-3.9.0/bin/mvn clean install
+        run: C:\apache-maven-3.9.2\bin\mvn clean install
 
       - name: Package the artifact
         run: |
