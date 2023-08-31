@@ -1,4 +1,4 @@
-name: Continuous Integration
+name: CI
 
 on:
   push:
@@ -7,35 +7,32 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted  # Specify the label of your self-hosted runner
+    runs-on: self-hosted
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Set up Java
         run: |
           echo "JAVA_HOME=C:\Program Files\Java\jdk-11" >> $GITHUB_ENV
           echo "PATH=$JAVA_HOME/bin:$PATH" >> $GITHUB_ENV
-
-      - name: Download Apache Maven
-        run: |
-            wget -nc "https://apache.org/dyn/mirrors/mirrors.cgi?action=download&filename=maven/maven-3/3.8.3/binaries/apache-maven-3.8.3-bin.tar.gz" -O maven.tar.gz
-            tar xzf maven.tar.gz
-            echo "export PATH=\$PATH:$(pwd)/apache-maven-3.8.3/bin" >> $GITHUB_ENV
-        shell: bash
-
-      - name: Set up Maven
-        run: |
-          echo "export PATH=\$PATH:/C:/Users/c.bhavya/Desktop/cicd" >> $GITHUB_ENV
-        shell: bash
+    
+      - name: Build with Maven
+        run: C:/apache-maven-3.9.0/bin/mvn clean install
 
       - name: Package the artifact
         run: |
           $outputPath = "my-java-app.zip"
           $sourcePath = "C:\Users\c.bhavya\Desktop\HDFC PROJ\java-trainning\Bhavya-Java\server\target\server.jar"
           Compress-Archive -Path $sourcePath -DestinationPath $outputPath
-
-      - name: Publish the artifact to GitHub release
+          
+      - name: Authenticate with GitHub
+        run: |
+          echo "machine github.com login ${{ secrets.MY_GITHUB_USERNAME }} password ${{ secrets.MY_GITHUB_TOKEN }}" > ~/.netrc
+      
+          - name: Publish the artifact to GitHub release
         run: |
           gh release create v1.0.0 my-java-app.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
