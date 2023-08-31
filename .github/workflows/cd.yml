@@ -32,7 +32,7 @@ jobs:
           $env:TOMCAT_URL = "http://localhost:8080"
           $env:TOMCAT_USERNAME = "deploy"
           $env:TOMCAT_PASSWORD = "varshu"
-          $env:WAR_FILE_PATH = "artifacts/my-java-app.zip"
+          $env:WAR_FILE_PATH = "$env:WAR_FILE_PATH = "C:\Users\c.bhavya\Desktop\demo\demo\actions-runner\_work\cicd\cicd\my-java-app.zip"          "
           
           # Deploy using Invoke-WebRequest
           Invoke-WebRequest -Uri "$($env:TOMCAT_URL)/manager/text/deploy?path=/myapp&update=true" -Method PUT -InFile $env:WAR_FILE_PATH -Credential (New-Object System.Management.Automation.PSCredential($env:TOMCAT_USERNAME, (ConvertTo-SecureString $env:TOMCAT_PASSWORD -AsPlainText -Force)))
