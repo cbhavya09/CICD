@@ -30,9 +30,16 @@ jobs:
           export PATH="$PATH:/c/apache-maven-3.9.0/bin"
         shell: bash
       
-
+      - name: List files in target directory
+        run: ls -R target
+      
+      - name: Debug directory contents
+        run: echo "Directory contents: $(ls -R target)"
+      
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: artifacts
-          path: target/*.war  # Adjust this to the correct path of your generated WAR file
+          path: target/*.war
+        if-no-files-found: warn
+      
