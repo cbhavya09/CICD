@@ -30,8 +30,12 @@ jobs:
           export PATH="$PATH:/C:/Users/c.bhavya/Desktop/cicd"
         shell: bash
       
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: artifacts
-          path: C:/Users/c.bhavya/Desktop/cicd/target/*.war
+      - name: Package the artifact
+        run: |
+          $outputPath = "my-java-app.zip"
+          $sourcePath = "C:\Users\c.bhavya\Desktop\HDFC PROJ\java-trainning\Bhavya-Java\server\target\server.jar"
+          Compress-Archive -Path $sourcePath -DestinationPath $outputPath
+          
+      - name: Publish the artifact to GitHub release
+        run: |
+          gh release create v6.5.1 my-java-app.zip
