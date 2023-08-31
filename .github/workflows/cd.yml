@@ -36,8 +36,9 @@ jobs:
             
             # Deploy using curl command
             curl -T $env:WAR_FILE_PATH "$($env:TOMCAT_URL)/manager/text/deploy?path=/myapp&update=true" --user "$($env:TOMCAT_USERNAME):$($env:TOMCAT_PASSWORD)"
-          shell: pwsh
-          env:
+        
+        shell: pwsh
+        env:
             GH_TOKEN: ${{ secrets.GH_TOKEN }}
             GH_HOSTNAME: github.com
         
