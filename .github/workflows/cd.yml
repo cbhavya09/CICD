@@ -18,7 +18,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: artifacts
-          path: artifacts
+          path: C:/Users/c.bhavya/Desktop/cicd/target/*.war
 
       - name: Deploy to Tomcat
         run: |
