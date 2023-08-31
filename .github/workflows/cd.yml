@@ -32,7 +32,7 @@ jobs:
           TOMCAT_URL="http://localhost:8080"
           TOMCAT_USERNAME="tomcat-users.xml"
           TOMCAT_PASSWORD="varshu"
-          WAR_FILE_PATH="artifacts/my-java-app.zip"  # Update the path if necessary
+          $WAR_FILE_PATH="artifacts/my-java-app.zip"
 
-          # Deploy using curl command (replace [WAR_FILENAME] with your war file name)
-          curl -T $WAR_FILE_PATH "$TOMCAT_URL/manager/text/deploy?path=/myapp&update=true" --user "$TOMCAT_USERNAME:$TOMCAT_PASSWORD"
+          # Deploy using curl command
+          curl -T $WAR_FILE_PATH "$($TOMCAT_URL)/manager/text/deploy?path=/myapp&update=true" --user "$($TOMCAT_USERNAME):$($TOMCAT_PASSWORD)"
