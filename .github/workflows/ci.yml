@@ -31,7 +31,8 @@ jobs:
         run: |
           echo "machine github.com login ${{ secrets.MY_GITHUB_USERNAME }} password ${{ secrets.MY_GITHUB_TOKEN }}" > ~/.netrc
       
-          - name: Publish the artifact to GitHub release
+    
+      - name: Publish the artifact to GitHub release
         run: |
           gh release create v1.0.0 my-java-app.zip
         env:
