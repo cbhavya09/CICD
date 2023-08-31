@@ -27,8 +27,8 @@ jobs:
         run: |
           gh release download v6.0.0 -p "my-java-app.zip" --repo cbhavya09/JAVA-APPLICATION
       
-          - name: Deploy to Tomcat
-          run: |
+      - name: Deploy to Tomcat
+        run: |
             $env:TOMCAT_URL = "http://localhost:8080"
             $env:TOMCAT_USERNAME = "deploy"
             $env:TOMCAT_PASSWORD = "varshu"
