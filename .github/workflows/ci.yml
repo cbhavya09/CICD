@@ -25,7 +25,11 @@ jobs:
             echo "export PATH=\$PATH:$(pwd)/apache-maven-3.8.3/bin" >> $GITHUB_ENV
         shell: bash
         
-        
+      - name: Set up Maven
+        run: |
+          export PATH="$PATH:/c/apache-maven-3.9.0/bin"
+        shell: bash
+      
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
