@@ -13,11 +13,16 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Build Project
-        run: ./gradlew build  # Replace with your build command
+      - name: Set Up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+
+      - name: Build Project with Maven
+        run: mvn clean package  # Adjust this to the Maven build command
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: artifacts
-          path: build/libs/*.war  # Adjust the path to your built WAR file
+          path: target/*.war  # Adjust this to the correct path of your generated WAR file
