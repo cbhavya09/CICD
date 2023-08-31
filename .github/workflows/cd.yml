@@ -27,12 +27,17 @@ jobs:
         run: |
           gh release download v6.0.0 -p "my-java-app.zip" --repo cbhavya09/JAVA-APPLICATION
       
-      - name: Deploy to Tomcat
-        run: |
-          TOMCAT_URL="http://localhost:8080"
-          TOMCAT_USERNAME="deploy"
-          TOMCAT_PASSWORD="varshu"
-          $WAR_FILE_PATH="artifacts/my-java-app.zip"
-
-          # Deploy using curl command
-          curl -T $WAR_FILE_PATH "$($TOMCAT_URL)/manager/text/deploy?path=/myapp&update=true" --user "$($TOMCAT_USERNAME):$($TOMCAT_PASSWORD)"
+          - name: Deploy to Tomcat
+          run: |
+            $env:TOMCAT_URL = "http://localhost:8080"
+            $env:TOMCAT_USERNAME = "deploy"
+            $env:TOMCAT_PASSWORD = "varshu"
+            $env:WAR_FILE_PATH = "artifacts/my-java-app.zip"
+            
+            # Deploy using curl command
+            curl -T $env:WAR_FILE_PATH "$($env:TOMCAT_URL)/manager/text/deploy?path=/myapp&update=true" --user "$($env:TOMCAT_USERNAME):$($env:TOMCAT_PASSWORD)"
+          shell: pwsh
+          env:
+            GH_TOKEN: ${{ secrets.GH_TOKEN }}
+            GH_HOSTNAME: github.com
+        
