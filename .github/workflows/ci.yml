@@ -30,11 +30,8 @@ jobs:
           export PATH="$PATH:/C:/Users/c.bhavya/Desktop/cicd"
         shell: bash
       
-      - name: List files in target directory
-        run: ls -R target
-      
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: artifacts
-          path: target/*.war
+          path: C:/Users/c.bhavya/Desktop/cicd/target/*.war
