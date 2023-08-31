@@ -27,7 +27,7 @@ jobs:
         
       - name: Set up Maven
         run: |
-          export PATH="$PATH:/C:/Users/c.bhavya/Desktop/cicd"
+          echo "export PATH=\$PATH:/C:/Users/c.bhavya/Desktop/cicd" >> $GITHUB_ENV
         shell: bash
       
       - name: Package the artifact
@@ -39,3 +39,7 @@ jobs:
       - name: Publish the artifact to GitHub release
         run: |
           gh release create v6.5.1 my-java-app.zip
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            
