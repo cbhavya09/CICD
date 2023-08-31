@@ -30,7 +30,7 @@ jobs:
       - name: Deploy to Tomcat
         run: |
           TOMCAT_URL="http://localhost:8080"
-          TOMCAT_USERNAME="tomcat-users.xml"
+          TOMCAT_USERNAME="deploy"
           TOMCAT_PASSWORD="varshu"
           $WAR_FILE_PATH="artifacts/my-java-app.zip"
 
