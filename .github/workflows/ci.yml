@@ -18,12 +18,8 @@ jobs:
           echo "JAVA_HOME=C:\Program Files\Java\jdk-11" >> $GITHUB_ENV
           echo "PATH=$JAVA_HOME/bin:$PATH" >> $GITHUB_ENV
     
-      - name: Build Project with Maven
-        run: |
-            wget -nc https://apache.osuosl.org/maven/maven-3/3.8.3/binaries/apache-maven-3.8.3-bin.tar.gz
-            tar xzf apache-maven-3.8.3-bin.tar.gz
-            export PATH=$PATH:$(pwd)/apache-maven-3.8.3/bin
-            mvn clean package  # Replace with your Maven build command
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
