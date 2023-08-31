@@ -27,7 +27,7 @@ jobs:
         
       - name: Set up Maven
         run: |
-          export PATH="$PATH:/c/apache-maven-3.9.0/bin"
+          export PATH="$PATH:/C:/Users/c.bhavya/Desktop/cicd"
         shell: bash
       
       - name: List files in target directory
@@ -42,4 +42,3 @@ jobs:
           name: artifacts
           path: target/*.war
         if-no-files-found: warn
-      
