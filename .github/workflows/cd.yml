@@ -1,4 +1,4 @@
-name: CD
+ame: CD
 
 on:
   workflow_run:
@@ -10,16 +10,23 @@ jobs:
   deploy:
     runs-on: self-hosted
 
+    env:
+      GH_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+      GH_HOSTNAME: ${{ vars.GH_HOSTNAME}}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Download Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: artifacts
-          path: C:\Users\c.bhavya\Desktop\HDFC PROJ\java-trainning\Bhavya-Java\server\target\server.jar
-
+      - name: Set up Java
+        run: |
+          echo "JAVA_HOME=C:\Program Files\Java\jdk-11" >> $GITHUB_ENV
+          echo "PATH=$JAVA_HOME/bin:$PATH" >> $GITHUB_ENV
+          
+      - name: Download artifact
+        run: |
+          gh release download v6.0.0 -p "my-java-app.zip" --repo cbhavya09/JAVA-APPLICATION
+      
       - name: Deploy to Tomcat
         run: |
           TOMCAT_URL="http://localhost:8080"
