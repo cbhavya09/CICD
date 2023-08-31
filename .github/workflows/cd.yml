@@ -1,8 +1,8 @@
-name: Continuous Deployment
+name: CD
 
 on:
   workflow_run:
-    workflows: ["Continuous Integration"]
+    workflows: ["CI"]
     types:
       - completed
 
@@ -11,16 +11,21 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Download Artifacts
+      - name: Download Artifact
         uses: actions/download-artifact@v2
         with:
           name: artifacts
-          path: C:/Users/c.bhavya/Desktop/cicd/target/*.war
+          path: artifacts
 
       - name: Deploy to Tomcat
         run: |
-          chmod +x deploy-to-tomcat.sh
-          ./deploy-to-tomcat.sh
+          TOMCAT_URL="http://localhost:8080"
+          TOMCAT_USERNAME="tomcat-users.xml"
+          TOMCAT_PASSWORD="varshu"
+          WAR_FILE_PATH="artifacts/my-java-app.zip"  # Update the path if necessary
+
+          # Deploy using curl command (replace [WAR_FILENAME] with your war file name)
+          curl -T $WAR_FILE_PATH "$TOMCAT_URL/manager/text/deploy?path=/myapp&update=true" --user "$TOMCAT_USERNAME:$TOMCAT_PASSWORD"
