@@ -28,8 +28,8 @@ jobs:
           gh release download v6.0.0 -p "my-java-app.zip" --repo cbhavya09/JAVA-APPLICATION
       
       - name: Extract artifact
-        run: Expand-Archive -Path "artifacts/my-java-app.zip" -DestinationPath "artifacts/my-java-app"
-  
+        run: Expand-Archive -Path "C:\Users\c.bhavya\Desktop\demo\demo\actions-runner\_work\cicd\cicd\my-java-app.zip" -DestinationPath "C:\Users\c.bhavya\Desktop\demo\demo\actions-runner\_work\cicd\cicd\artifacts\my-java-app"
+        
       - name: Copy artifact to Tomcat webapps
         run: Copy-Item -Path "artifacts/my-java-app/*" -Destination "C:\apache-tomcat-11.0.0-M6\webapps\my-java-app" -Recurse
   
