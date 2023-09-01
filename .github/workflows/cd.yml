@@ -27,6 +27,20 @@ jobs:
         run: |
           gh release download v6.0.0 -p "my-java-app.zip" --repo cbhavya09/JAVA-APPLICATION
       
+      - name: Extract artifact
+        run: Expand-Archive -Path "artifacts/my-java-app.zip" -DestinationPath "artifacts/my-java-app"
+  
+      - name: Copy artifact to Tomcat webapps
+        run: Copy-Item -Path "artifacts/my-java-app/*" -Destination "C:\apache-tomcat-11.0.0-M6\webapps\my-java-app" -Recurse
+  
+      - name: Start Tomcat
+        run: C:\apache-tomcat-11.0.0-M6\bin\startup.bat
+  
+      - name: Check if Tomcat is running
+        run: |
+          $tomcatRunning = Test-NetConnection -ComputerName "localhost" -Port 8080
+          if ($tomcatRunning.TcpTestSucceeded -eq $true) { exit 0 } else { exit 1 }
+  
       - name: Deploy to Tomcat
         run: |
             $env:TOMCAT_URL = "http://localhost:8080"
