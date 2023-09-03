@@ -33,9 +33,11 @@ jobs:
       - name: Copy artifact to Tomcat webapps
         run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\my-java-app" -Destination "C:\apache-tomcat-10.1.13\webapps" -Recurse
   
-      - name: Start Tomcat
+      - name: Set up Tomcat
         run: |
-          & "C:\apache-tomcat-10.1.9\bin\startup.bat"
+          $env:TOMCAT_HOME = "C:\apache-tomcat-10.1.9"
+          $env:PATH = "$env:PATH;$env:TOMCAT_HOME\bin"
+      
       
   
       - name: Check if Tomcat is running
