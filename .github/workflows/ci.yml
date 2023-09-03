@@ -24,7 +24,7 @@ jobs:
       - name: Package the artifact
         run: |
           $outputPath = "my-java-app.zip"
-          $sourcePath = "C:\Users\c.bhavya\Desktop\HDFC PROJ\java-trainning\Bhavya-Java\server\target\server.jar"
+          $sourcePath = "C:\Users\c.bhavya\Desktop\java\helloworld-2.6.jar"
           Compress-Archive -Path $sourcePath -DestinationPath $outputPath
           
       - name: Authenticate with GitHub
@@ -34,6 +34,6 @@ jobs:
     
       - name: Publish the artifact to GitHub release
         run: |
-          gh release create v2.0.0 my-java-app.zip
+          gh release create v3.0.0 my-java-app.zip
         env:
           GH_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
