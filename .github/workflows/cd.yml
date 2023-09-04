@@ -10,10 +10,6 @@ jobs:
   deploy:
     runs-on: self-hosted
 
-    env:
-      GH_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-      GH_HOSTNAME: ${{ secrets.GH_HOSTNAME }}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -25,14 +21,12 @@ jobs:
           
       - name: Download artifact
         run: |
-          gh release download v4.0.0 -p "my-java-app.zip" --repo cbhavya09/cicd
+          gh release download v4.1.0 -p "my-java-app.zip" --repo cbhavya09/cicd
       
       - name: Extract artifact
-        run: Expand-Archive -Path "C:\Users\c.bhavya\Desktop\demo\demo\actions-runner\_work\cicd\cicd\my-java-app.zip" -DestinationPath "C:\Users\c.bhavya\Desktop\cicd\my-java-app"
+        run: |
+          Expand-Archive -Path "my-java-app.zip" -DestinationPath "C:\apache-tomcat-10.1.13\webapps\myapp"
         
-      - name: Copy artifact to Tomcat webapps
-        run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\my-java-app" -Destination "C:\apache-tomcat-10.1.13\webapps" -Recurse
-  
       - name: Set up Tomcat
         run: |
           $env:TOMCAT_HOME = "C:\apache-tomcat-10.1.13"
@@ -46,10 +40,10 @@ jobs:
       - name: Create WAR file
         run: |
           # Navigate to the directory containing your web application files
-          cd "C:\apache-tomcat-10.1.13\webapps\my-java-app"
+          cd "C:\apache-tomcat-10.1.13\webapps\myapp"
   
           # Create a .war file using the 'jar' command
-          jar -cvf "C:\apache-tomcat-10.1.13\webapps\myapp.war" *
+          jar -cvf "../myapp.war" *
 
       - name: Deploy to Tomcat
         run: |
@@ -61,4 +55,4 @@ jobs:
           $env:WAR_FILE_PATH = "C:\apache-tomcat-10.1.13\webapps\myapp.war"  # Path to your WAR file
         
           # Deploy using Invoke-WebRequest
-          Invoke-WebRequest -Uri "$env:TOMCAT_URL/deploy?path=$env:APP_PATH&update=true" -Method POST -InFile $env:WAR_FILE_PATH -Credential (New-Object System.Management.Automation.PSCredential($env:TOMCAT_USERNAME, (ConvertTo-SecureString $env:TOMCAT_PASSWORD -AsPlainText -Force)))
+          Invoke-WebRequest -Uri "$env:TOMCAT_URL$env:APP_PATH" -Method PUT -InFile $env:WAR_FILE_PATH -Credential (New-Object System.Management.Automation.PSCredential($env:TOMCAT_USERNAME, (ConvertTo-SecureString $env:TOMCAT_PASSWORD -AsPlainText -Force)))
