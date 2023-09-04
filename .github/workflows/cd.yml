@@ -42,13 +42,21 @@ jobs:
           $tomcatRunning = Test-NetConnection -ComputerName "localhost" -Port 8080
           if ($tomcatRunning.TcpTestSucceeded -eq $true) { exit 0 } else { exit 1 }
   
-      - name: Create WAR file
+      - name: Navigate to the directory containing your web application files
         run: |
-          # Navigate to the directory containing your web application files
-          cd "C:\apache-tomcat-10.1.13\webapps\myapp"
-  
-          # Create a .war file using the 'jar' command
-          jar -cvf "../myapp.war" *
+            $webappDir = "C:\apache-tomcat-10.1.13\webapps\my-java-app"  # Update this path to the correct location
+            if (Test-Path -Path $webappDir -PathType Container) {
+              Set-Location -Path $webappDir
+            } else {
+              Write-Host "Directory $webappDir does not exist."
+              exit 1  # Exit the script with an error code
+            }
+        
+      - name: Create a .war file using the 'jar' command
+        run: |
+            # Create a .war file using the 'jar' command
+            jar -cvf "../myapp.war" *
+        
 
       - name: Deploy to Tomcat
         run: |
