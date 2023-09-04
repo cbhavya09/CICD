@@ -60,12 +60,5 @@ jobs:
           $env:APP_PATH = "/myapp"  # Context path for your application
           $env:WAR_FILE_PATH = "C:\apache-tomcat-10.1.13\webapps\myapp.war"  # Path to your WAR file
         
-          # Debugging: Print out the values of variables
-          Write-Host "TOMCAT_URL: $env:TOMCAT_URL"
-          Write-Host "TOMCAT_USERNAME: $env:TOMCAT_USERNAME"
-          Write-Host "TOMCAT_PASSWORD: $env:TOMCAT_PASSWORD"
-          Write-Host "APP_PATH: $env:APP_PATH"
-          Write-Host "WAR_FILE_PATH: $env:WAR_FILE_PATH"
-        
           # Deploy using Invoke-WebRequest
-          Invoke-WebRequest -Uri "$env:TOMCAT_URL/deploy?path=$env:APP_PATH&update=true" -Method PUT -InFile $env:WAR_FILE_PATH -Credential (New-Object System.Management.Automation.PSCredential($env:TOMCAT_USERNAME, (ConvertTo-SecureString $env:TOMCAT_PASSWORD -AsPlainText -Force)))
+          Invoke-WebRequest -Uri "$env:TOMCAT_URL/deploy?path=$env:APP_PATH&update=true" -Method POST -InFile $env:WAR_FILE_PATH -Credential (New-Object System.Management.Automation.PSCredential($env:TOMCAT_USERNAME, (ConvertTo-SecureString $env:TOMCAT_PASSWORD -AsPlainText -Force)))
