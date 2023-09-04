@@ -10,6 +10,10 @@ jobs:
   deploy:
     runs-on: self-hosted
 
+    env:
+      GH_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+      GH_HOSTNAME: ${{ secrets.GH_HOSTNAME }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -18,14 +22,15 @@ jobs:
         run: |
           echo "JAVA_HOME=C:\Program Files\Java\jdk-11" >> $GITHUB_ENV
           echo "PATH=$JAVA_HOME/bin:$PATH" >> $GITHUB_ENV
-          
+
       - name: Download artifact
         run: |
-          gh release download v4.1.0 -p "my-java-app.zip" --repo cbhavya09/cicd
-      
+          # Download the my-java-app.zip asset from release v4.1.0
+          gh release download v4.1.0 -D . -p "my-java-app.zip" --repo cbhavya09/cicd
+
       - name: Extract artifact
-        run: |
-          Expand-Archive -Path "my-java-app.zip" -DestinationPath "C:\apache-tomcat-10.1.13\webapps\myapp"
+        run: Expand-Archive -Path "./my-java-app.zip" -DestinationPath "C:\apache-tomcat-10.1.13\webapps\my-java-app"
+
         
       - name: Set up Tomcat
         run: |
