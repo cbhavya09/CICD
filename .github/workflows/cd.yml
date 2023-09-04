@@ -45,9 +45,6 @@ jobs:
           $tomcatRunning = Test-NetConnection -ComputerName "localhost" -Port 8080
           if ($tomcatRunning.TcpTestSucceeded -eq $true) { exit 0 } else { exit 1 }
   
-      - name: Create WAR file
-        run: Compress-Archive -Path "C:\apache-tomcat-10.1.13\webapps\my-java-app\*" -DestinationPath "C:\apache-tomcat-10.1.13\webapps\myapp.war"
-        
       - name: Deploy to Tomcat
         run: |
           $env:TOMCAT_URL = "http://localhost:8080/manager/text"
