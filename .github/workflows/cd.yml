@@ -56,7 +56,7 @@ jobs:
           $env:TOMCAT_URL = "http://localhost:8080/manager/text"
           $env:TOMCAT_USERNAME = "deploy"
           $env:TOMCAT_PASSWORD = "varshu"
-          $env:APP_PATH = "/myapp"  # Context path for your application
+          $env:APP_PATH = ""  # Root context path for your applications
           $env:WAR_FILE_PATH = "C:\apache-tomcat-10.1.13\webapps\myapp.war"  # Path to your WAR file
             
           # Deploy using Invoke-WebRequest
