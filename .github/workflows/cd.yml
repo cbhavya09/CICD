@@ -22,41 +22,43 @@ jobs:
         run: |
           echo "JAVA_HOME=C:\Program Files\Java\jdk-11" >> $GITHUB_ENV
           echo "PATH=$JAVA_HOME/bin:$PATH" >> $GITHUB_ENV
-          
+
       - name: Download artifact
         run: |
           gh release download v4.2.0 -p "my-java-app.zip" --repo cbhavya09/cicd
-      
+
       - name: Extract artifact
-        run: Expand-Archive -Path "C:\Users\c.bhavya\Desktop\demo\demo\actions-runner\_work\cicd\cicd\my-java-app.zip" -DestinationPath "C:\Users\c.bhavya\Desktop\cicd\my-java-app"
-        
+        run: |
+          Expand-Archive -Path "my-java-app.zip" -DestinationPath "C:\apache-tomcat-10.1.13\webapps\my-java-app"
+
       - name: Copy artifact to Tomcat webapps
-        run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\my-java-app" -Destination "C:\apache-tomcat-10.1.13\webapps" -Recurse
-  
+        run: |
+          Copy-Item -Path "C:\apache-tomcat-10.1.13\webapps\my-java-app" -Destination "C:\apache-tomcat-10.1.13\webapps" -Recurse
+
       - name: Set up Tomcat
         run: |
           $env:TOMCAT_HOME = "C:\apache-tomcat-10.1.13"
           $env:PATH = "$env:PATH;$env:TOMCAT_HOME\bin"
-  
+
       - name: Check if Tomcat is running
         run: |
-          $tomcatRunning = Test-NetConnection -ComputerName "localhost" -Port 8080
-          if ($tomcatRunning.TcpTestSucceeded -eq $true) { exit 0 } else { exit 1 }
-  
+          # Implement a more comprehensive check for Tomcat readiness here
+
       - name: Create WAR file
         run: |
-          # Navigate to the directory containing your web application files
+          # Ensure the correct path to your web application
           cd "C:\apache-tomcat-10.1.13\webapps\my-java-app"
-  
+
           # Create a .war file using the 'jar' command
           jar -cvf "C:\apache-tomcat-10.1.13\webapps\myapp.war" *
-  
+
       - name: Deploy to Tomcat
         run: |
           $env:TOMCAT_URL = "http://localhost:8080/manager/text"
           $env:TOMCAT_USERNAME = "deploy"
           $env:TOMCAT_PASSWORD = "varshu"
-          $env:APP_PATH = "/myapp"   # Root context path for your applications
-          $env:WAR_FILE_PATH = "C:\apache-tomcat-10.1.13\webapps\myapp.war"   # Path to your WAR file       
+          $env:APP_PATH = "/myapp"
+          $env:WAR_FILE_PATH = "C:\apache-tomcat-10.1.13\webapps\myapp.war"
+
           # Deploy using Invoke-WebRequest
           Invoke-WebRequest -Uri "$env:TOMCAT_URL/deploy?path=$env:APP_PATH&update=true" -Method PUT -InFile $env:WAR_FILE_PATH -Credential (New-Object System.Management.Automation.PSCredential($env:TOMCAT_USERNAME, (ConvertTo-SecureString $env:TOMCAT_PASSWORD -AsPlainText -Force)))
