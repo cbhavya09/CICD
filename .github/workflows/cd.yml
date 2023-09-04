@@ -53,7 +53,7 @@ jobs:
   
       - name: Deploy to Tomcat
         run: |
-          $env:TOMCAT_URL = "http://localhost:8080/manager/text"
+          $env:TOMCAT_URL = "http://localhost:8080/"
           $env:TOMCAT_USERNAME = "deploy"
           $env:TOMCAT_PASSWORD = "varshu"
           $env:APP_PATH = "/myapp"  # Context path for your application
