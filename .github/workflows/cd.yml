@@ -46,7 +46,7 @@ jobs:
       - name: Create WAR file
         run: |
           # Navigate to the directory containing your web application files
-          cd "C:\apache-tomcat-10.1.13\webapps\my-java-app"
+          cd "C:\apache-tomcat-10.1.13\webapps\helloworls-2.6.jar"
   
           # Create a .war file using the 'jar' command
           jar -cvf "C:\apache-tomcat-10.1.13\webapps\myapp.war" *
