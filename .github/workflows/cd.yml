@@ -54,8 +54,8 @@ jobs:
       - name: Deploy to Tomcat
         run: |
           $env:TOMCAT_URL = "http://localhost:8080/manager/text"
-          $env:TOMCAT_USERNAME = "deploy"
-          $env:TOMCAT_PASSWORD = "varshu"
+          $env:TOMCAT_USERNAME = "tomcat"
+          $env:TOMCAT_PASSWORD = "s3cret"
           $env:APP_PATH = "/myapp"  # Root context path for your applications
           $env:WAR_FILE_PATH = "C:\apache-tomcat-10.1.13\webapps\myapp.war"  # Path to your WAR file
             
