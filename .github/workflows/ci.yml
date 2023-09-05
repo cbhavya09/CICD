@@ -24,7 +24,7 @@ jobs:
       - name: Package the artifact
         run: |
           $outputPath = "my-java-app.zip"
-          $sourcePath = "C:\Users\c.bhavya\Desktop\java\my-project-1.0.0.jar"
+          $sourcePath = "C:\Users\c.bhavya\Desktop\java\helloworld-2.6.jar"
           Compress-Archive -Path $sourcePath -DestinationPath $outputPath
           
       - name: Authenticate with GitHub
