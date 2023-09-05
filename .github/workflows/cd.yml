@@ -61,3 +61,4 @@ jobs:
           # No need to copy the WAR file again; it's already in the webapps directory
 
           Write-Host "Deployment successful."
+
