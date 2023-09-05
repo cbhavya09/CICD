@@ -53,11 +53,31 @@ jobs:
   
       - name: Deploy to Tomcat
         run: |
-          $env:TOMCAT_URL = "http://localhost:8080/manager/text"
-          $env:TOMCAT_USERNAME = "deploy"
-          $env:TOMCAT_PASSWORD = "varshu"
-          $env:APP_PATH = ""  # Root context path for your applications
-          $env:WAR_FILE_PATH = "C:\apache-tomcat-10.1.13\webapps\myapp.war"  # Path to your WAR file
-            
-          # Deploy using Invoke-WebRequest
-          Invoke-WebRequest -Uri "$env:TOMCAT_URL/deploy?path=$env:APP_PATH&update=true" -Method PUT -InFile $env:WAR_FILE_PATH -Credential (New-Object System.Management.Automation.PSCredential($env:TOMCAT_USERNAME, (ConvertTo-SecureString $env:TOMCAT_PASSWORD -AsPlainText -Force)))
+            # Define the Tomcat manager URL and credentials
+            $TOMCAT_URL = "http://localhost:8080/manager/text"
+            $TOMCAT_USERNAME = "deploy"
+            $TOMCAT_PASSWORD = "varshu"
+        
+            # Convert the credentials to a Base64-encoded string
+            $Base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("${TOMCAT_USERNAME}:${TOMCAT_PASSWORD}"))
+        
+            # Create the headers for the request with the Authorization header
+            $headers = @{
+                Authorization = "Basic $Base64AuthInfo"
+            }
+        
+            # Define the deployment path and WAR file path
+            $APP_PATH = ""  # Root context path for your applications
+            $WAR_FILE_PATH = "C:\apache-tomcat-10.1.13\webapps\myapp.war"  # Path to your WAR file
+        
+            # Deploy the WAR file to Tomcat
+            $response = Invoke-WebRequest -Uri "$TOMCAT_URL/deploy?path=$APP_PATH&update=true" -Headers $headers -Method PUT -InFile $WAR_FILE_PATH
+        
+            # Check if the deployment was successful
+            if ($response.StatusCode -eq 200) {
+                Write-Host "Deployment successful."
+            } else {
+                Write-Host "Deployment failed with status code $($response.StatusCode)."
+                Write-Host "Response content: $($response.Content)"
+            }
+        
