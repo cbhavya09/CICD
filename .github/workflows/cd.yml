@@ -36,11 +36,20 @@ jobs:
           $JAR_FILE_PATH = "C:\Users\c.bhavya\Desktop\cicd\my-java-app\helloworld-2.6.jar"
           $WAR_FILE_PATH = "C:\Users\c.bhavya\Desktop\cicd\my-java-app\myapp.war"
 
-          # Copy the JAR file and rename it to your desired WAR file name
+          # Create a new directory for the WAR file
+          New-Item -Path $WAR_FILE_PATH -ItemType Directory
+
+          # Copy the JAR file to the new directory as the root of the WAR file
           Copy-Item -Path $JAR_FILE_PATH -Destination $WAR_FILE_PATH
 
+          # Rename the JAR file to your application name (e.g., myapp.jar)
+          Rename-Item -Path (Join-Path $WAR_FILE_PATH "helloworld-2.6.jar") -NewName "myapp.jar"
+
+          # Create a web.xml file (replace with your configuration)
+          Set-Content -Path (Join-Path $WAR_FILE_PATH "WEB-INF\web.xml") -Value "<web-app>...</web-app>"
+
       - name: Copy WAR file to Tomcat webapps
-        run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\my-java-app\myapp.war" -Destination "C:\apache-tomcat-10.1.13\webapps"
+        run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\my-java-app\myapp.war" -Destination "C:\apache-tomcat-10.1.13\webapps" -Recurse
 
       - name: Set up Tomcat
         run: |
@@ -54,11 +63,5 @@ jobs:
 
       - name: Deploy WAR to Tomcat
         run: |
-          # Define the Tomcat webapps directory and WAR file path
-          $TOMCAT_WEBAPPS_DIR = "C:\apache-tomcat-10.1.13\webapps"  # Path to the Tomcat webapps directory
-          $WAR_FILE_PATH = "C:\apache-tomcat-10.1.13\webapps\myapp.war"  # Path to your WAR file
-
-          # No need to copy the WAR file again; it's already in the webapps directory
-
           Write-Host "Deployment successful."
 
