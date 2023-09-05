@@ -43,4 +43,27 @@ jobs:
           $tomcatRunning = Test-NetConnection -ComputerName "localhost" -Port 8080
           if ($tomcatRunning.TcpTestSucceeded -eq $true) { exit 0 } else { exit 1 }
   
-      
+      - name: Deploy JAR to Tomcat
+        run: |
+            # Define the Tomcat manager URL and credentials
+            $TOMCAT_URL = "http://localhost:8080/manager/text"
+            $TOMCAT_USERNAME = "deploy"
+            $TOMCAT_PASSWORD = "varshu"
+        
+            # Convert the credentials to a Base64-encoded string
+            $Base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("${TOMCAT_USERNAME}:${TOMCAT_PASSWORD}"))
+        
+            # Define the deployment path and JAR file path
+            $APP_PATH = ""  # Root context path for your applications
+            $JAR_FILE_PATH = "C:\apache-tomcat-10.1.13\webapps\helloworld-2.6.jar"  # Path to your JAR file
+        
+            # Deploy the JAR file to Tomcat
+            $response = Invoke-WebRequest -Uri "$TOMCAT_URL/deploy?path=$APP_PATH&update=true" -Headers $headers -Method PUT -InFile $JAR_FILE_PATH
+        
+            # Check if the deployment was successful
+            if ($response.StatusCode -eq 200) {
+                Write-Host "Deployment successful."
+            } else {
+                Write-Host "Deployment failed with status code $($response.StatusCode)."
+                Write-Host "Response content: $($response.Content)"
+            }
