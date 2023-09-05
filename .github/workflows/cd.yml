@@ -25,7 +25,7 @@ jobs:
           
       - name: Download artifact
         run: |
-          gh release download v4.4.2 -p "my-java-app.zip" --repo cbhavya09/cicd
+          gh release download v4.4.3 -p "my-java-app.zip" --repo cbhavya09/cicd
       
       - name: Extract artifact
         run: Expand-Archive -Path "C:\Users\c.bhavya\Desktop\demo\demo\actions-runner\_work\cicd\cicd\my-java-app.zip" -DestinationPath "C:\Users\c.bhavya\Desktop\cicd\my-java-app"
@@ -43,13 +43,13 @@ jobs:
           $tomcatRunning = Test-NetConnection -ComputerName "localhost" -Port 8080
           if ($tomcatRunning.TcpTestSucceeded -eq $true) { exit 0 } else { exit 1 }
   
-      - name: Create WAR file
-        run: |
+      # - name: Create WAR file
+        #run: |
           # Navigate to the directory containing your web application files
-          cd "C:\apache-tomcat-10.1.13\webapps"
+          #cd "C:\apache-tomcat-10.1.13\webapps"
   
           # Create a .war file using the 'jar' command
-          jar -cvf "C:\apache-tomcat-10.1.13\webapps\myapp.war" *
+          #jar -cvf "C:\apache-tomcat-10.1.13\webapps\myapp.war" *
   
       - name: Deploy to Tomcat
         run: |

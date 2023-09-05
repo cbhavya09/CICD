@@ -34,6 +34,6 @@ jobs:
     
       - name: Publish the artifact to GitHub release
         run: |
-          gh release create v4.4.2 my-java-app.zip
+          gh release create v4.4.3 my-java-app.zip
         env:
           GH_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
