@@ -52,7 +52,7 @@ jobs:
           $webappUrl = "http://localhost:8080/webapps/"
           $response = Invoke-WebRequest -Uri $webappUrl
           if ($response.StatusCode -eq 200) {
-              Write-Host "Application deployed successfully."
+              Write-Host "Application deployed successfully at $webappUrl."
           } else {
               Write-Host "Application deployment failed with status code $($response.StatusCode)."
               Write-Host "Response content: $($response.Content)"
