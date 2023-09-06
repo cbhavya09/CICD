@@ -12,7 +12,13 @@
     </properties>
 
     <dependencies>
-        <!-- Add your dependencies here -->
+        <!-- Servlet API -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -31,7 +37,9 @@
                             <directory>src/main/webapp</directory>
                         </resource>
                     </webResources>
-		    <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
+                    <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
+                    <!-- Context path matching the WAR file name -->
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
         </plugins>
