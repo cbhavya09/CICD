@@ -30,8 +30,11 @@ jobs:
       - name: Extract artifact
         run: Expand-Archive -Path "C:\Users\c.bhavya\Desktop\demo\demo\actions-runner\_work\cicd\cicd\my-java-app.zip" -DestinationPath "C:\Users\c.bhavya\Desktop\cicd\my-java-app"
 
+      - name: Rename JAR file to ROOT.jar
+        run: Rename-Item -Path "C:\Users\c.bhavya\Desktop\cicd\my-java-app\helloworld-2.6.jar" -NewName "ROOT.jar"
+
       - name: Copy artifact to Tomcat webapps
-        run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\my-java-app\helloworld-2.6.jar" -Destination "C:\apache-tomcat-10.1.13\webapps" -Recurse
+        run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\my-java-app\ROOT.jar" -Destination "C:\apache-tomcat-10.1.13\webapps" -Recurse
 
       - name: Set up Tomcat
         run: |
@@ -58,4 +61,5 @@ jobs:
             Write-Host "Response content: $($response.Content)"
             exit 1
           }
+
         
