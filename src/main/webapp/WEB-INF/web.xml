@@ -7,7 +7,7 @@
     <!-- Servlet Configuration -->
     <servlet>
         <servlet-name>myapp</servlet-name>
-        <servlet-class>com.example.myapp</servlet-class>
+        <servlet-class>com.example.HelloWorldServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
