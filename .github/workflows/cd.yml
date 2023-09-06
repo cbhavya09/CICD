@@ -25,7 +25,7 @@ jobs:
 
       - name: Download artifact
         run: |
-          gh release download v4.4.3 -p "my-java-app.jar" --repo cbhavya09/cicd
+          gh release download v4.4.3 -p "helloworld-2.6.jar" --repo cbhavya09/cicd
 
       - name: Copy artifact to Tomcat webapps
         run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\my-java-app\helloworld-2.6.jar" -Destination "C:\apache-tomcat-10.1.13\webapps"
