@@ -13,6 +13,8 @@ jobs:
     env:
       GH_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
       GH_HOSTNAME: ${{ secrets.GH_HOSTNAME }}
+      TOMCAT_USERNAME: your_username
+      TOMCAT_PASSWORD: your_password
 
     steps:
       - name: Checkout code
@@ -49,10 +51,13 @@ jobs:
           $APP_PATH = "myapp"  # Change this to your desired context path
           $JAR_FILE_PATH = "C:\apache-tomcat-10.1.13\webapps\helloworld-2.6.jar"  # Path to your JAR file
           $TOMCAT_URL = "http://localhost:8080"  # Replace with your Tomcat server URL
-        
+          
+          # Base64 encode the Tomcat Manager credentials
+          $Base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(("${env:deploy}:${env:varshu}")))
+  
           # Deploy the JAR file to Tomcat
           $response = Invoke-WebRequest -Uri "$TOMCAT_URL/manager/text/deploy?path=/$APP_PATH&update=true" -Headers @{Authorization="Basic $Base64AuthInfo"} -Method PUT -InFile $JAR_FILE_PATH
-        
+  
           # Check if the deployment was successful
           if ($response.StatusCode -eq 200) {
               Write-Host "Deployment successful."
@@ -60,7 +65,3 @@ jobs:
               Write-Host "Deployment failed with status code $($response.StatusCode)."                
               Write-Host "Response content: $($response.Content)"
           }
-        
-        
-        
-  
