@@ -35,33 +35,27 @@ jobs:
       - name: Copy JAR file to Tomcat webapps
         run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\my-java-app\helloworld-2.6.jar" -Destination "C:\apache-tomcat-10.1.13\webapps"
 
-      - name: Set up Tomcat
-        run: |
-          $env:TOMCAT_HOME = "C:\apache-tomcat-10.1.13"
-          $env:PATH = "$env:PATH;$env:TOMCAT_HOME\bin"
-
       - name: Check if Tomcat is running
         run: |
           $tomcatRunning = Test-NetConnection -ComputerName "localhost" -Port 8080
           if ($tomcatRunning.TcpTestSucceeded -eq $true) { exit 0 } else { exit 1 }
 
-      - name: Deploy JAR to Tomcat
+      - name: Restart Tomcat
         run: |
-          # Define the deployment path and JAR file path
-          $APP_PATH = "/"  # Change this to your desired context path
-          $JAR_FILE_PATH = "C:\apache-tomcat-10.1.13\webapps\helloworld-2.6.jar"  # Path to your JAR file
-          $TOMCAT_URL = "http://localhost:8080"  # Replace with your Tomcat server URL
+          # Restart Tomcat (adjust this command based on your operating system)
+          net stop TomcatServiceName
+          net start TomcatServiceName
 
-          # Base64 encode the Tomcat Manager credentials
-          $Base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(("${env:TOMCAT_USERNAME}:${env:TOMCAT_PASSWORD}")))
+      - name: Wait for Tomcat to start
+        run: Start-Sleep -s 60  # Wait for Tomcat to fully start (adjust the delay as needed)
 
-          # Deploy the JAR file to Tomcat
-          $response = Invoke-WebRequest -Uri "$TOMCAT_URL/manager/text/deploy?path=/$APP_PATH&update=true" -Headers @{Authorization="Basic $Base64AuthInfo"} -Method PUT -InFile $JAR_FILE_PATH
-
-          # Check if the deployment was successful
+      - name: Verify deployment
+        run: |
+          # Verify that the application is accessible
+          $response = Invoke-WebRequest -Uri "http://localhost:8080/webapps/helloworld-2.6" -Method Get
           if ($response.StatusCode -eq 200) {
               Write-Host "Deployment successful."
           } else {
               Write-Host "Deployment failed with status code $($response.StatusCode)."                
-              Write-Host "Response content: $($response.Content)"
           }
+
