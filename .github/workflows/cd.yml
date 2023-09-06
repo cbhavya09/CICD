@@ -47,14 +47,15 @@ jobs:
         run: |
           # Wait for a moment to ensure Tomcat deploys the application
           Start-Sleep -Seconds 30
-          
-          # Check if the application is available at http://localhost:8080/webapps/
-          $webappUrl = "http://localhost:8080/webapps/"
+            
+          # Check if the application is available at http://localhost:8080/
+          $webappUrl = "http://localhost:8080/"
           $response = Invoke-WebRequest -Uri $webappUrl
           if ($response.StatusCode -eq 200) {
-              Write-Host "Application deployed successfully at $webappUrl."
+            Write-Host "Application deployed successfully at $webappUrl."
           } else {
-              Write-Host "Application deployment failed with status code $($response.StatusCode)."
-              Write-Host "Response content: $($response.Content)"
-              exit 1
+            Write-Host "Application deployment failed with status code $($response.StatusCode)."
+            Write-Host "Response content: $($response.Content)"
+            exit 1
           }
+        
