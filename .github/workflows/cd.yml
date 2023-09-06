@@ -42,14 +42,14 @@ jobs:
         run: |
           $tomcatRunning = Test-NetConnection -ComputerName "localhost" -Port 8080
           if ($tomcatRunning.TcpTestSucceeded -eq $true) { exit 0 } else { exit 1 }
-
+          
       - name: Verify deployment
         run: |
           # Wait for a moment to ensure Tomcat deploys the application
           Start-Sleep -Seconds 30
-            
-          # Check if the application is available at http://localhost:8080/
-          $webappUrl = "http://localhost:8080/webapps/"
+                    
+          # Check if the application is available at http://localhost:8080/helloworld-2.6/
+          $webappUrl = "http://localhost:8080/helloworld-2.6/"
           $response = Invoke-WebRequest -Uri $webappUrl
           if ($response.StatusCode -eq 200) {
             Write-Host "Application deployed successfully at $webappUrl."
@@ -58,5 +58,4 @@ jobs:
             Write-Host "Response content: $($response.Content)"
             exit 1
           }
-        
         
