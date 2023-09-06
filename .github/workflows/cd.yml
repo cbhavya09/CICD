@@ -46,7 +46,7 @@ jobs:
         run: |
           # Verify that the application is accessible
           # You should specify the correct URL for your JAR file here
-          $response = Invoke-WebRequest -Uri "http://localhost:8080/my-java-app/helloworld-2.6.jar" -Method Get
+          $response = Invoke-WebRequest -Uri "http://localhost:8080/helloworld-2.6.jar" -Method Get
           if ($response.StatusCode -eq 200) {
               Write-Host "Deployment successful."
           } else {
