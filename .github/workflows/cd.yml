@@ -32,9 +32,11 @@ jobs:
       - name: Extract artifact
         run: Expand-Archive -Path "C:\Users\c.bhavya\Desktop\demo\demo\actions-runner\_work\cicd\cicd\my-java-app.zip" -DestinationPath "C:\Users\c.bhavya\Desktop\cicd\my-java-app"
 
-      - name: Copy JAR file to Tomcat webapps
-        run: |
-          Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\my-java-app\helloworld-2.6.jar" -Destination "C:\apache-tomcat-10.1.13\webapps" -Force
+      - name: Create web application directory
+        run: New-Item -Path "C:\apache-tomcat-10.1.13\webapps\my-java-app" -ItemType Directory -Force
+
+      - name: Copy JAR file to web application directory
+        run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\my-java-app\helloworld-2.6.jar" -Destination "C:\apache-tomcat-10.1.13\webapps\my-java-app" -Force
 
       - name: Check if Tomcat is running
         run: |
@@ -47,7 +49,8 @@ jobs:
       - name: Verify deployment
         run: |
           # Verify that the application is accessible
-          $response = Invoke-WebRequest -Uri "http://localhost:8080/helloworld-2.6.jar" -Method Get
+          # You should specify the correct URL for your JAR file here
+          $response = Invoke-WebRequest -Uri "http://localhost:8080/my-java-app/helloworld-2.6.jar" -Method Get
           if ($response.StatusCode -eq 200) {
               Write-Host "Deployment successful."
           } else {
