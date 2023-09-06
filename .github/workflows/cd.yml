@@ -33,9 +33,9 @@ jobs:
       - name: Deploy JAR to Tomcat
         run: |
           # Define the deployment path and JAR file path
-          $APP_PATH = "/"  # Root context path for your applications
+          $APP_PATH = "/webapps"  # Context path for your application
           $JAR_FILE_PATH = "C:\Users\c.bhavya\Desktop\cicd\my-java-app\helloworld-2.6.jar"  # Path to your JAR file
-        
+      
           # Deploy the JAR file to Tomcat
           $Base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(("${TOMCAT_USERNAME}:${TOMCAT_PASSWORD}")))
           $response = Invoke-WebRequest -Uri "$TOMCAT_URL/deploy?path=$APP_PATH&update=true" -Headers @{Authorization="Basic $Base64AuthInfo"} -Method PUT -InFile $JAR_FILE_PATH
@@ -47,3 +47,4 @@ jobs:
               Write-Host "Deployment failed with status code $($response.StatusCode)."
               Write-Host "Response content: $($response.Content)"
           }
+      
