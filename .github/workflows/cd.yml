@@ -25,13 +25,10 @@ jobs:
 
       - name: Download artifact
         run: |
-          gh release download v4.4.3 -p "my-java-app.zip" --repo cbhavya09/cicd
-
-      - name: Extract artifact
-        run: Expand-Archive -Path "C:\Users\c.bhavya\Desktop\demo\demo\actions-runner\_work\cicd\cicd\my-java-app.zip" -DestinationPath "C:\Users\c.bhavya\Desktop\cicd\my-java-app"
+          gh release download v4.4.3 -p "my-java-app.jar" --repo cbhavya09/cicd
 
       - name: Copy artifact to Tomcat webapps
-        run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\my-java-app\helloworld-2.6.jar" -Destination "C:\apache-tomcat-10.1.13\webapps" -Recurse
+        run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\my-java-app\helloworld-2.6.jar" -Destination "C:\apache-tomcat-10.1.13\webapps"
 
       - name: Set up Tomcat
         run: |
@@ -47,9 +44,9 @@ jobs:
         run: |
           # Wait for a moment to ensure Tomcat deploys the application
           Start-Sleep -Seconds 30
-        
-          # Check if the application is available at the specific context path
-          $webappUrl = "http://localhost:8080/helloworld-2.6/"  # Modify the context path as needed
+            
+          # Check if the application is available at http://localhost:8080/webapps/
+          $webappUrl = "http://localhost:8080/webapps/"
           $response = Invoke-WebRequest -Uri $webappUrl
           if ($response.StatusCode -eq 200) {
             Write-Host "Application deployed successfully at $webappUrl."
@@ -58,6 +55,3 @@ jobs:
             Write-Host "Response content: $($response.Content)"
             exit 1
           }
-        
-        
-        
