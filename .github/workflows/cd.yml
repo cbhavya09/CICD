@@ -36,6 +36,11 @@ jobs:
           $APP_PATH = "/webapps"  # Context path for your application
           $JAR_FILE_PATH = "C:\Users\c.bhavya\Desktop\cicd\my-java-app\helloworld-2.6.jar"  # Path to your JAR file
       
+          # Define the Tomcat manager URL and credentials
+          $TOMCAT_URL = "http://localhost:8080/manager/text"  # Update with your Tomcat server URL
+          $TOMCAT_USERNAME = "deploy"  # Make sure this matches the username in tomcat-users.xml
+          $TOMCAT_PASSWORD = "varshu"  # Make sure this matches the password in tomcat-users.xml
+      
           # Deploy the JAR file to Tomcat
           $Base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(("${TOMCAT_USERNAME}:${TOMCAT_PASSWORD}")))
           $response = Invoke-WebRequest -Uri "$TOMCAT_URL/deploy?path=$APP_PATH&update=true" -Headers @{Authorization="Basic $Base64AuthInfo"} -Method PUT -InFile $JAR_FILE_PATH
