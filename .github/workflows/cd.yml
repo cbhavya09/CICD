@@ -47,17 +47,18 @@ jobs:
         run: |
           # Define the deployment path and JAR file path
           $APP_PATH = "myapp"  # Change this to your desired context path
-          $JAR_FILE_PATH = "C:\apache-tomcat-10.1.13\webapps"  # Path to your JAR file
+          $JAR_FILE_PATH = "C:\apache-tomcat-10.1.13\webapps\helloworld-2.6.jar"  # Path to your JAR file
         
           # Deploy the JAR file to Tomcat
           $response = Invoke-WebRequest -Uri "$TOMCAT_URL/deploy?path=/$APP_PATH&update=true" -Headers @{Authorization="Basic $Base64AuthInfo"} -Method PUT -InFile $JAR_FILE_PATH
         
           # Check if the deployment was successful
-           if ($response.StatusCode -eq 200) {
+          if ($response.StatusCode -eq 200) {
               Write-Host "Deployment successful."
           } else {
               Write-Host "Deployment failed with status code $($response.StatusCode)."                
               Write-Host "Response content: $($response.Content)"
           }
+        
         
   
