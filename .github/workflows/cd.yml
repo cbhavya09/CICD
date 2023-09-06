@@ -33,7 +33,8 @@ jobs:
         run: Expand-Archive -Path "C:\Users\c.bhavya\Desktop\demo\demo\actions-runner\_work\cicd\cicd\my-java-app.zip" -DestinationPath "C:\Users\c.bhavya\Desktop\cicd\my-java-app"
 
       - name: Copy JAR file to Tomcat webapps
-        run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\my-java-app\helloworld-2.6.jar" -Destination "C:\apache-tomcat-10.1.13\webapps"
+        run: |
+          Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\my-java-app\helloworld-2.6.jar" -Destination "C:\apache-tomcat-10.1.13\webapps" -Force
 
       - name: Check if Tomcat is running
         run: |
@@ -46,10 +47,9 @@ jobs:
       - name: Verify deployment
         run: |
           # Verify that the application is accessible
-          $response = Invoke-WebRequest -Uri "http://localhost:8080/webapps/helloworld-2.6" -Method Get
+          $response = Invoke-WebRequest -Uri "http://localhost:8080/helloworld-2.6.jar" -Method Get
           if ($response.StatusCode -eq 200) {
               Write-Host "Deployment successful."
           } else {
               Write-Host "Deployment failed with status code $($response.StatusCode)."                
           }
-
