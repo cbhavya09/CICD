@@ -24,40 +24,40 @@ jobs:
         run: |
           echo "JAVA_HOME=C:\Program Files\Java\jdk-11" >> $GITHUB_ENV
           echo "PATH=$JAVA_HOME/bin:$PATH" >> $GITHUB_ENV
-          
+
       - name: Download artifact
         run: |
           gh release download v4.4.3 -p "my-java-app.zip" --repo cbhavya09/cicd
-      
+
       - name: Extract artifact
         run: Expand-Archive -Path "C:\Users\c.bhavya\Desktop\demo\demo\actions-runner\_work\cicd\cicd\my-java-app.zip" -DestinationPath "C:\Users\c.bhavya\Desktop\cicd\my-java-app"
-        
-      - name: Copy artifact to Tomcat webapps
-        run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\my-java-app\helloworld-2.6.jar" -Destination "C:\apache-tomcat-10.1.13\webapps" -Recurse
-  
+
+      - name: Copy JAR file to Tomcat webapps
+        run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\my-java-app\helloworld-2.6.jar" -Destination "C:\apache-tomcat-10.1.13\webapps"
+
       - name: Set up Tomcat
         run: |
           $env:TOMCAT_HOME = "C:\apache-tomcat-10.1.13"
           $env:PATH = "$env:PATH;$env:TOMCAT_HOME\bin"
-  
+
       - name: Check if Tomcat is running
         run: |
           $tomcatRunning = Test-NetConnection -ComputerName "localhost" -Port 8080
           if ($tomcatRunning.TcpTestSucceeded -eq $true) { exit 0 } else { exit 1 }
-  
+
       - name: Deploy JAR to Tomcat
         run: |
           # Define the deployment path and JAR file path
-          $APP_PATH = "myapp"  # Change this to your desired context path
+          $APP_PATH = ""  # Change this to your desired context path
           $JAR_FILE_PATH = "C:\apache-tomcat-10.1.13\webapps\helloworld-2.6.jar"  # Path to your JAR file
           $TOMCAT_URL = "http://localhost:8080"  # Replace with your Tomcat server URL
-          
+
           # Base64 encode the Tomcat Manager credentials
           $Base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(("${env:TOMCAT_USERNAME}:${env:TOMCAT_PASSWORD}")))
-  
+
           # Deploy the JAR file to Tomcat
           $response = Invoke-WebRequest -Uri "$TOMCAT_URL/manager/text/deploy?path=/$APP_PATH&update=true" -Headers @{Authorization="Basic $Base64AuthInfo"} -Method PUT -InFile $JAR_FILE_PATH
-  
+
           # Check if the deployment was successful
           if ($response.StatusCode -eq 200) {
               Write-Host "Deployment successful."
