@@ -12,7 +12,7 @@
 
     <servlet-mapping>
         <servlet-name>myapp</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/myapp</url-pattern>
     </servlet-mapping>
 
     <!-- Welcome File List -->
