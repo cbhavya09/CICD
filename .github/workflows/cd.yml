@@ -40,12 +40,6 @@ jobs:
           $tomcatRunning = Test-NetConnection -ComputerName "localhost" -Port 8080
           if ($tomcatRunning.TcpTestSucceeded -eq $true) { exit 0 } else { exit 1 }
 
-      - name: Restart Tomcat
-        run: |
-          # Restart Tomcat (adjust this command based on your operating system)
-          net stop TomcatServiceName
-          net start TomcatServiceName
-
       - name: Wait for Tomcat to start
         run: Start-Sleep -s 60  # Wait for Tomcat to fully start (adjust the delay as needed)
 
