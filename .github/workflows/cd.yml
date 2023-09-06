@@ -22,9 +22,11 @@ jobs:
         run: |
           echo "JAVA_HOME=C:\Program Files\Java\jdk-11" >> $GITHUB_ENV
           echo "PATH=$JAVA_HOME/bin:$PATH" >> $GITHUB_ENV
+
       - name: Download artifact
         run: |
           gh release download v4.4.3 -p "my-java-app.zip" --repo cbhavya09/cicd
+
       - name: Extract artifact
         run: Expand-Archive -Path "C:\Users\c.bhavya\Desktop\demo\demo\actions-runner\_work\cicd\cicd\my-java-app.zip" -DestinationPath "C:\Users\c.bhavya\Desktop\cicd\my-java-app"
 
@@ -35,17 +37,19 @@ jobs:
         run: |
           $env:TOMCAT_HOME = "C:\apache-tomcat-10.1.13"
           $env:PATH = "$env:PATH;$env:TOMCAT_HOME\bin"
+
       - name: Check if Tomcat is running
         run: |
           $tomcatRunning = Test-NetConnection -ComputerName "localhost" -Port 8080
           if ($tomcatRunning.TcpTestSucceeded -eq $true) { exit 0 } else { exit 1 }
+
       - name: Verify deployment
         run: |
           # Wait for a moment to ensure Tomcat deploys the application
           Start-Sleep -Seconds 30
-            
-          # Check if the application is available at http://localhost:8080/
-          $webappUrl = "http://localhost:8080/"
+        
+          # Check if the application is available at the specific context path
+          $webappUrl = "http://localhost:8080/helloworld-2.6/"  # Modify the context path as needed
           $response = Invoke-WebRequest -Uri $webappUrl
           if ($response.StatusCode -eq 200) {
             Write-Host "Application deployed successfully at $webappUrl."
@@ -54,5 +58,6 @@ jobs:
             Write-Host "Response content: $($response.Content)"
             exit 1
           }
+        
         
         
