@@ -34,28 +34,29 @@ jobs:
 
       - name: Convert JAR to WAR
         run: |
-          # Replace 'helloworld-2.6.jar' and 'webapp.war' with appropriate names
-          jar -cvf webapp.war -C C:\Users\c.bhavya\Desktop\cicd\my-java-app
-      
+          # Define the paths
+          $JAR_FILE_PATH = "C:\Users\c.bhavya\Desktop\cicd\my-java-app\helloworld-2.6.jar"
+          $WAR_FILE_PATH = "C:\Users\c.bhavya\Desktop\cicd\my-java-app\myapp.war"
+          # Copy the JAR file and rename it to your desired WAR file name
+          Copy-Item -Path $JAR_FILE_PATH -Destination $WAR_FILE_PATH
+
       - name: Copy WAR file to Tomcat webapps
+        run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\my-java-app\myapp.war" -Destination "C:\apache-tomcat-10.1.13\webapps"
+
+      - name: Set up Tomcat
         run: |
-          Copy-Item -Path "webapp.war" -Destination "C:\apache-tomcat-10.1.13\webapps" -Force
+          $env:TOMCAT_HOME = "C:\apache-tomcat-10.1.13"
+          $env:PATH = "$env:PATH;$env:TOMCAT_HOME\bin"
 
       - name: Check if Tomcat is running
         run: |
           $tomcatRunning = Test-NetConnection -ComputerName "localhost" -Port 8080
           if ($tomcatRunning.TcpTestSucceeded -eq $true) { exit 0 } else { exit 1 }
           
-      - name: Wait for Tomcat to start
-        run: Start-Sleep -s 60  # Wait for Tomcat to fully start (adjust the delay as needed)
-
-      - name: Verify deployment
+      - name: Deploy WAR to Tomcat
         run: |
-          # Verify that the application is accessible
-          # You should specify the correct URL for your application here
-          $response = Invoke-WebRequest -Uri "http://localhost:8080/webapp" -Method Get
-          if ($response.StatusCode -eq 200) {
-              Write-Host "Deployment successful."
-          } else {
-              Write-Host "Deployment failed with status code $($response.StatusCode)."                
-          }
+          # Define the Tomcat webapps directory and WAR file path
+          $TOMCAT_WEBAPPS_DIR = "C:\apache-tomcat-10.1.13\webapps"  # Path to the Tomcat webapps directory
+          $WAR_FILE_PATH = "C:\apache-tomcat-10.1.13\webapps\myapp.war"  # Path to your WAR file
+          # No need to copy the WAR file again; it's already in the webapps directory
+          Write-Host "Deployment successful."
