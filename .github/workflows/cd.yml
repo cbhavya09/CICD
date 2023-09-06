@@ -22,34 +22,39 @@ jobs:
         run: |
           echo "JAVA_HOME=C:\Program Files\Java\jdk-11" >> $GITHUB_ENV
           echo "PATH=$JAVA_HOME/bin:$PATH" >> $GITHUB_ENV
-          
+
       - name: Download artifact
         run: |
           gh release download v4.4.3 -p "my-java-app.zip" --repo cbhavya09/cicd
-      
+
       - name: Extract artifact
         run: Expand-Archive -Path "C:\Users\c.bhavya\Desktop\demo\demo\actions-runner\_work\cicd\cicd\my-java-app.zip" -DestinationPath "C:\Users\c.bhavya\Desktop\cicd\my-java-app"
-        
-      - name: Deploy JAR to Tomcat
+
+      - name: Copy artifact to Tomcat webapps
+        run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\my-java-app\helloworld-2.6.jar" -Destination "C:\apache-tomcat-10.1.13\webapps" -Recurse
+
+      - name: Set up Tomcat
         run: |
-          # Define the deployment path and JAR file path
-          $APP_PATH = "/webapps"  # Context path for your application
-          $JAR_FILE_PATH = "C:\Users\c.bhavya\Desktop\cicd\my-java-app\helloworld-2.6.jar"  # Path to your JAR file
-      
-          # Define the Tomcat manager URL and credentials
-          $TOMCAT_URL = "http://localhost:8080/manager/text"  # Update with your Tomcat server URL
-          $TOMCAT_USERNAME = "deploy"  # Make sure this matches the username in tomcat-users.xml
-          $TOMCAT_PASSWORD = "varshu"  # Make sure this matches the password in tomcat-users.xml
-      
-          # Deploy the JAR file to Tomcat
-          $Base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(("${TOMCAT_USERNAME}:${TOMCAT_PASSWORD}")))
-          $response = Invoke-WebRequest -Uri "$TOMCAT_URL/deploy?path=$APP_PATH&update=true" -Headers @{Authorization="Basic $Base64AuthInfo"} -Method PUT -InFile $JAR_FILE_PATH
-      
-          # Check if the deployment was successful
+          $env:TOMCAT_HOME = "C:\apache-tomcat-10.1.13"
+          $env:PATH = "$env:PATH;$env:TOMCAT_HOME\bin"
+
+      - name: Check if Tomcat is running
+        run: |
+          $tomcatRunning = Test-NetConnection -ComputerName "localhost" -Port 8080
+          if ($tomcatRunning.TcpTestSucceeded -eq $true) { exit 0 } else { exit 1 }
+
+      - name: Verify deployment
+        run: |
+          # Wait for a moment to ensure Tomcat deploys the application
+          Start-Sleep -Seconds 30
+          
+          # Check if the application is available at http://localhost:8080/webapps/
+          $webappUrl = "http://localhost:8080/webapps/"
+          $response = Invoke-WebRequest -Uri $webappUrl
           if ($response.StatusCode -eq 200) {
-              Write-Host "Deployment successful."
+              Write-Host "Application deployed successfully."
           } else {
-              Write-Host "Deployment failed with status code $($response.StatusCode)."
+              Write-Host "Application deployment failed with status code $($response.StatusCode)."
               Write-Host "Response content: $($response.Content)"
+              exit 1
           }
-      
