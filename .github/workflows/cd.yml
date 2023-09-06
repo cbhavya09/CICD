@@ -48,7 +48,7 @@ jobs:
       - name: Deploy JAR to Tomcat
         run: |
           # Define the deployment path and JAR file path
-          $APP_PATH = ""  # Change this to your desired context path
+          $APP_PATH = "/"  # Change this to your desired context path
           $JAR_FILE_PATH = "C:\apache-tomcat-10.1.13\webapps\helloworld-2.6.jar"  # Path to your JAR file
           $TOMCAT_URL = "http://localhost:8080"  # Replace with your Tomcat server URL
 
