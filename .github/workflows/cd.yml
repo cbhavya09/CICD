@@ -27,13 +27,16 @@ jobs:
 
       - name: Download artifact
         run: |
-          gh release download v4.4.3 -p "helloworld-2.6.jar" --repo cbhavya09/cicd
+          gh release download v4.4.3 -p "my-java-app.zip" --repo cbhavya09/cicd
+
+      - name: Extract artifact
+        run: Expand-Archive -Path "C:\Users\c.bhavya\Desktop\demo\demo\actions-runner\_work\cicd\cicd\my-java-app.zip" -DestinationPath "C:\Users\c.bhavya\Desktop\cicd\my-java-app"
 
       - name: Convert JAR to WAR
         run: |
           # Replace 'helloworld-2.6.jar' and 'webapp.war' with appropriate names
-          jar -cvf webapp.war -C C:\Users\c.bhavya\Desktop\java\helloworld-2.6.jar
-
+          jar -cvf webapp.war -C C:\Users\c.bhavya\Desktop\cicd\my-java-app
+      
       - name: Copy WAR file to Tomcat webapps
         run: |
           Copy-Item -Path "webapp.war" -Destination "C:\apache-tomcat-10.1.13\webapps" -Force
