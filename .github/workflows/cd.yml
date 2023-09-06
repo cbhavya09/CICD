@@ -30,18 +30,10 @@ jobs:
           gh release download v4.4.3 -p "my-java-app.zip" --repo cbhavya09/cicd
 
       - name: Extract artifact
-        run: Expand-Archive -Path "C:\Users\c.bhavya\Desktop\demo\demo\actions-runner\_work\cicd\cicd\my-java-app.zip" -DestinationPath "C:\Users\c.bhavya\Desktop\cicd\my-java-app"
-
-      - name: Convert JAR to WAR
-        run: |
-          # Define the paths
-          $JAR_FILE_PATH = "C:\Users\c.bhavya\Desktop\cicd\my-java-app\helloworld-2.6.jar"
-          $WAR_FILE_PATH = "C:\Users\c.bhavya\Desktop\cicd\my-java-app\myapp.war"
-          # Copy the JAR file and rename it to your desired WAR file name
-          Copy-Item -Path $JAR_FILE_PATH -Destination $WAR_FILE_PATH
+        run: Expand-Archive -Path "C:\Users\c.bhavya\Desktop\demo\demo\actions-runner\_work\cicd\cicd\my-java-app.zip" -DestinationPath "C:\Users\c.bhavya\Desktop\cicd\cicd\my-java-app"
 
       - name: Copy WAR file to Tomcat webapps
-        run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\my-java-app\myapp.war" -Destination "C:\apache-tomcat-10.1.13\webapps"
+        run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\cicd\my-java-app\myapp.war" -Destination "C:\apache-tomcat-10.1.13\webapps"
 
       - name: Set up Tomcat
         run: |
