@@ -43,15 +43,18 @@ jobs:
 
       - name: Deploy WAR file to Tomcat
         run: |
+          # Extract the base name of the artifact (removes ".war" extension)
+          ARTIFACT_BASENAME=$(basename "${{ env.ARTIFACT_NAME }}" .war)
+          
           curl -v -u "${{ env.TOMCAT_USERNAME }}:${{ env.TOMCAT_PASSWORD }}" \
             -T "${{ github.workspace }}/${{ env.ARTIFACT_NAME }}" \
-            "http://${{ env.TOMCAT_HOSTNAME }}:${{ env.TOMCAT_PORT }}/manager/text/deploy?path=/${{ env.ARTIFACT_NAME%.war }}&update=true"
+            "http://${{ env.TOMCAT_HOSTNAME }}:${{ env.TOMCAT_PORT }}/manager/text/deploy?path=/${ARTIFACT_BASENAME}&update=true"
 
       - name: Verify deployment
         run: |
           sleep 10  # Adjust if needed to wait for deployment to complete
           response_code=$(curl -s -o /dev/null -w "%{http_code}" \
-            "http://${{ env.TOMCAT_HOSTNAME }}:${{ env.TOMCAT_PORT }}/${{ env.ARTIFACT_NAME%.war }}/")
+            "http://${{ env.TOMCAT_HOSTNAME }}:${{ env.TOMCAT_PORT }}/${{ env.ARTIFACT_NAME }}/")
 
           if [ "$response_code" == "200" ]; then
             echo "Deployment successful."
