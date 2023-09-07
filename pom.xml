@@ -2,7 +2,7 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.example</groupId>
-    <artifactId>my-web-app</artifactId>
+    <artifactId>myapp</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging> <!-- Packaging type is WAR -->
 
@@ -27,9 +27,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>3.2.2</version>
+                <version>3.4.0</version>
                 <configuration>
                     <!-- Name of the WAR file (optional) -->
+                    <warName>myapp</warName>
                     <!-- Location of web resources (e.g., JSPs) -->
                     <webResources>
                         <resource>
