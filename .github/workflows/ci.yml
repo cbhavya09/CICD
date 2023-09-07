@@ -25,7 +25,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: myapp
-          path: target/myapp.war
+          path: C:\Users\c.bhavya\Desktop\cicd\cicd\target\myapp.war
 
       - name: Authenticate with GitHub
         run: |
