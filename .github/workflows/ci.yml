@@ -21,18 +21,19 @@ jobs:
       - name: Build with Maven
         run: C:\apache-maven-3.9.2\bin\mvn clean install
 
-      - name: Upload WAR artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: myapp
-          path: C:\Users\c.bhavya\Desktop\cicd\cicd\target\myapp.war
-
+      - name: Package the artifact
+        run: |
+          $outputPath = "mywebapp.zip"
+          $sourcePath = "C:\Users\c.bhavya\Desktop\cicd\cicd\target\myapp.war"
+          Compress-Archive -Path $sourcePath -DestinationPath $outputPath
+          
       - name: Authenticate with GitHub
         run: |
           echo "machine github.com login ${{ secrets.MY_GITHUB_USERNAME }} password ${{ secrets.MY_GITHUB_TOKEN }}" > ~/.netrc
-
-      - name: Create GitHub Release
+      
+    
+      - name: Publish the artifact to GitHub release
         run: |
-          gh release create v6.0.0 target/myapp.war --title "MyApp v1.0.0" --notes "Release notes for v1.0.0"
+          gh release create v6.1.1 mywebapp.zip
         env:
           GH_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}

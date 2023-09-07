@@ -8,14 +8,13 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     env:
+      GH_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+      GH_HOSTNAME: ${{ secrets.GH_HOSTNAME }}
       TOMCAT_USERNAME: ${{ secrets.TOMCAT_USERNAME }}
       TOMCAT_PASSWORD: ${{ secrets.TOMCAT_PASSWORD }}
-      TOMCAT_HOSTNAME: localhost  # Update with your Tomcat hostname
-      TOMCAT_PORT: 8080          # Update with your Tomcat port
-      ARTIFACT_NAME: myapp.war    # Update with your artifact name
 
     steps:
       - name: Checkout code
@@ -25,32 +24,28 @@ jobs:
         run: |
           echo "JAVA_HOME=C:\Program Files\Java\jdk-11" >> $GITHUB_ENV
           echo "PATH=$JAVA_HOME/bin:$PATH" >> $GITHUB_ENV
-
-      - name: Download and move artifact
+      - name: Download artifact
         run: |
-            curl -LJO "https://github.com/cbhavya09/cicd/releases/download/v6.0.0/myapp.war"
-            if [ ! -f "${{ github.workspace }}/${{ env.ARTIFACT_NAME }}" ]; then
-              mv "${{ env.ARTIFACT_NAME }}" "${{ github.workspace }}/${{ env.ARTIFACT_NAME }}"
-            else
-              echo "Artifact file already exists in the workspace directory."
-            fi
-        
+          gh release download v6.1.1 -p "mywebapp.zip" --repo cbhavya09/cicd
+      - name: Extract artifact
+        run: Expand-Archive -Path "C:\Users\c.bhavya\Desktop\demo\demo\actions-runner\_work\cicd\cicd\mywebapp.zip" -DestinationPath "C:\Users\c.bhavya\Desktop\cicd\cicd\mywebapp"
+
+      - name: Copy WAR file to Tomcat webapps
+        run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\cicd\mywebapp\myapp.war" -Destination "C:\apache-tomcat-10.1.13\webapps"
+
       - name: Set up Tomcat
         run: |
-              $env:TOMCAT_HOME = "C:\apache-tomcat-10.1.13"
-              $env:PATH = "$env:PATH;$env:TOMCAT_HOME\bin"
-
+          $env:TOMCAT_HOME = "C:\apache-tomcat-10.1.13"
+          $env:PATH = "$env:PATH;$env:TOMCAT_HOME\bin"
       - name: Check if Tomcat is running
         run: |
-              $tomcatRunning = Test-NetConnection -ComputerName "localhost" -Port 8080
-              if ($tomcatRunning.TcpTestSucceeded -eq $true) { exit 0 } else { exit 1 }
+          $tomcatRunning = Test-NetConnection -ComputerName "localhost" -Port 8080
+          if ($tomcatRunning.TcpTestSucceeded -eq $true) { exit 0 } else { exit 1 }
           
-      - name: Deploy file to Tomcat
+      - name: Deploy WAR to Tomcat
         run: |
-              # Define the Tomcat webapps directory and WAR file path
-              $TOMCAT_WEBAPPS_DIR = "C:\apache-tomcat-10.1.13\webapps"  # Path to the Tomcat webapps directory
-              $WAR_FILE_PATH = "$TOMCAT_WEBAPPS_DIR\myapp.war"  # Path to your WAR file
-              
-              # No need to copy the WAR file again; it's already in the webapps directory
-              Write-Host "Deployment successful."
-          
+          # Define the Tomcat webapps directory and WAR file path
+          $TOMCAT_WEBAPPS_DIR = "C:\apache-tomcat-10.1.13\webapps"  # Path to the Tomcat webapps directory
+          $WAR_FILE_PATH = "C:\apache-tomcat-10.1.13\webapps\myapp.war"  # Path to your WAR file
+          # No need to copy the WAR file again; it's already in the webapps directory
+          Write-Host "Deployment successful."
