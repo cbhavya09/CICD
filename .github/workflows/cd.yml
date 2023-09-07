@@ -27,13 +27,13 @@ jobs:
 
       - name: Download artifact
         run: |
-          gh release download v5.5.1 -p "mywebapp.zip" --repo cbhavya09/cicd
+          gh release download v5.6.1 -p "mywebapp.zip" --repo cbhavya09/cicd
 
       - name: Extract artifact
         run: Expand-Archive -Path "C:\Users\c.bhavya\Desktop\demo\demo\actions-runner\_work\cicd\cicd\mywebapp.zip" -DestinationPath "C:\Users\c.bhavya\Desktop\cicd\cicd\mywebapp"
 
-      - name: Copy file to Tomcat webapps
-        run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\cicd\mywebapp" -Destination "C:\apache-tomcat-10.1.13\webapps"
+      - name: Copy WAR file to Tomcat webapps
+        run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\cicd\mywebapp\myapp.war" -Destination "C:\apache-tomcat-10.1.13\webapps"
 
       - name: Set up Tomcat
         run: |
@@ -49,6 +49,6 @@ jobs:
         run: |
           # Define the Tomcat webapps directory and WAR file path
           $TOMCAT_WEBAPPS_DIR = "C:\apache-tomcat-10.1.13\webapps"  # Path to the Tomcat webapps directory
-          $FILE_PATH = "C:\apache-tomcat-10.1.13\webapps\mywebapp"  # Path to your WAR file
+          $WAR_FILE_PATH = "C:\apache-tomcat-10.1.13\webapps\myapp.war"  # Path to your WAR file
           # No need to copy the WAR file again; it's already in the webapps directory
           Write-Host "Deployment successful."
