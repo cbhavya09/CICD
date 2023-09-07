@@ -8,13 +8,14 @@ on:
 
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     env:
-      GH_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-      GH_HOSTNAME: ${{ secrets.GH_HOSTNAME }}
       TOMCAT_USERNAME: ${{ secrets.TOMCAT_USERNAME }}
       TOMCAT_PASSWORD: ${{ secrets.TOMCAT_PASSWORD }}
+      TOMCAT_HOSTNAME: localhost  # Update with your Tomcat hostname
+      TOMCAT_PORT: 8080          # Update with your Tomcat port
+      ARTIFACT_NAME: myapp.war    # Update with your artifact name
 
     steps:
       - name: Checkout code
@@ -27,28 +28,34 @@ jobs:
 
       - name: Download artifact
         run: |
-          gh release download v5.6.1 -p "mywebapp.zip" --repo cbhavya09/cicd
-
-      - name: Extract artifact
-        run: Expand-Archive -Path "C:\Users\c.bhavya\Desktop\demo\demo\actions-runner\_work\cicd\cicd\mywebapp.zip" -DestinationPath "C:\Users\c.bhavya\Desktop\cicd\cicd\mywebapp"
-
-      - name: Copy WAR file to Tomcat webapps
-        run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\cicd\mywebapp\myapp.war" -Destination "C:\apache-tomcat-10.1.13\webapps"
-
+          curl -LJO "https://github.com/cbhavya09/cicd/releases/download/v6.0.0/${{ env.ARTIFACT_NAME }}"
+          mv "${{ env.ARTIFACT_NAME }}" "${{ github.workspace }}/${{ env.ARTIFACT_NAME }}"
+        
       - name: Set up Tomcat
         run: |
-          $env:TOMCAT_HOME = "C:\apache-tomcat-10.1.13"
-          $env:PATH = "$env:PATH;$env:TOMCAT_HOME\bin"
+          sudo apt-get update
+          sudo apt-get install -y tomcat9  # Install Tomcat (adjust for your version)
+          sudo systemctl start tomcat9     # Start Tomcat
+          sudo systemctl enable tomcat9   # Enable Tomcat to start on boot
 
-      - name: Check if Tomcat is running
+      - name: Wait for Tomcat to start
+        run: sleep 10  # Adjust if needed to wait for Tomcat to start properly
+
+      - name: Deploy WAR file to Tomcat
         run: |
-          $tomcatRunning = Test-NetConnection -ComputerName "localhost" -Port 8080
-          if ($tomcatRunning.TcpTestSucceeded -eq $true) { exit 0 } else { exit 1 }
-          
-      - name: Deploy file to Tomcat
+          curl -v -u "${{ env.TOMCAT_USERNAME }}:${{ env.TOMCAT_PASSWORD }}" \
+            -T "${{ github.workspace }}/${{ env.ARTIFACT_NAME }}" \
+            "http://${{ env.TOMCAT_HOSTNAME }}:${{ env.TOMCAT_PORT }}/manager/text/deploy?path=/${{ env.ARTIFACT_NAME%.war }}&update=true"
+
+      - name: Verify deployment
         run: |
-          # Define the Tomcat webapps directory and WAR file path
-          $TOMCAT_WEBAPPS_DIR = "C:\apache-tomcat-10.1.13\webapps"  # Path to the Tomcat webapps directory
-          $WAR_FILE_PATH = "C:\apache-tomcat-10.1.13\webapps\myapp.war"  # Path to your WAR file
-          # No need to copy the WAR file again; it's already in the webapps directory
-          Write-Host "Deployment successful."
+          sleep 10  # Adjust if needed to wait for deployment to complete
+          response_code=$(curl -s -o /dev/null -w "%{http_code}" \
+            "http://${{ env.TOMCAT_HOSTNAME }}:${{ env.TOMCAT_PORT }}/${{ env.ARTIFACT_NAME%.war }}/")
+
+          if [ "$response_code" == "200" ]; then
+            echo "Deployment successful."
+          else
+            echo "Deployment failed with HTTP status code $response_code."
+            exit 1
+          fi
