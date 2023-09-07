@@ -27,11 +27,12 @@ jobs:
       - name: Download artifact
         run: |
           gh release download v6.1.1 -p "mywebapp.zip" --repo cbhavya09/cicd
+
       - name: Extract artifact
-        run: Expand-Archive -Path "C:\Users\c.bhavya\Desktop\demo\demo\actions-runner\_work\cicd\cicd\mywebapp.zip" -DestinationPath "C:\Users\c.bhavya\Desktop\cicd\cicd\mywebapp"
+        run: Expand-Archive -Path "C:\Users\c.bhavya\Desktop\demo\demo\actions-runner\_work\cicd\cicd\mywebapp.zip" -DestinationPath "C:\apache-tomcat-10.1.13\webapps"
 
       - name: Copy WAR file to Tomcat webapps
-        run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\cicd\mywebapp\myapp.war" -Destination "C:\apache-tomcat-10.1.13\webapps"
+        run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\cicd\target\myapp.war" -Destination "C:\apache-tomcat-10.1.13\webapps"
 
       - name: Set up Tomcat
         run: |
