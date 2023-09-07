@@ -27,13 +27,13 @@ jobs:
 
       - name: Download artifact
         run: |
-          gh release download v5.4.1 -p "my-java-app.zip" --repo cbhavya09/cicd
+          gh release download v5.5.1 -p "mywebapp.zip" --repo cbhavya09/cicd
 
       - name: Extract artifact
-        run: Expand-Archive -Path "C:\Users\c.bhavya\Desktop\demo\demo\actions-runner\_work\cicd\cicd\my-java-app.zip" -DestinationPath "C:\Users\c.bhavya\Desktop\cicd\cicd\my-java-app"
+        run: Expand-Archive -Path "C:\Users\c.bhavya\Desktop\demo\demo\actions-runner\_work\cicd\cicd\mywebapp.zip" -DestinationPath "C:\Users\c.bhavya\Desktop\cicd\cicd\mywebapp"
 
-      - name: Copy WAR file to Tomcat webapps
-        run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\cicd\my-java-app\myapp.war" -Destination "C:\apache-tomcat-10.1.13\webapps"
+      - name: Copy file to Tomcat webapps
+        run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\cicd\mywebapp" -Destination "C:\apache-tomcat-10.1.13\webapps"
 
       - name: Set up Tomcat
         run: |
@@ -45,10 +45,10 @@ jobs:
           $tomcatRunning = Test-NetConnection -ComputerName "localhost" -Port 8080
           if ($tomcatRunning.TcpTestSucceeded -eq $true) { exit 0 } else { exit 1 }
           
-      - name: Deploy WAR to Tomcat
+      - name: Deploy file to Tomcat
         run: |
           # Define the Tomcat webapps directory and WAR file path
           $TOMCAT_WEBAPPS_DIR = "C:\apache-tomcat-10.1.13\webapps"  # Path to the Tomcat webapps directory
-          $WAR_FILE_PATH = "C:\apache-tomcat-10.1.13\webapps\myapp.war"  # Path to your WAR file
+          $FILE_PATH = "C:\apache-tomcat-10.1.13\webapps\mywebapp"  # Path to your WAR file
           # No need to copy the WAR file again; it's already in the webapps directory
           Write-Host "Deployment successful."
