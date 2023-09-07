@@ -39,17 +39,17 @@ jobs:
         run: |
               $env:TOMCAT_HOME = "C:\apache-tomcat-10.1.13"
               $env:PATH = "$env:PATH;$env:TOMCAT_HOME\bin"
-          
+
       - name: Check if Tomcat is running
         run: |
-            $tomcatRunning = Test-NetConnection -ComputerName "localhost" -Port 8080
-            if ($tomcatRunning.TcpTestSucceeded -eq $true) { exit 0 } else { exit 1 }
+              $tomcatRunning = Test-NetConnection -ComputerName "localhost" -Port 8080
+              if ($tomcatRunning.TcpTestSucceeded -eq $true) { exit 0 } else { exit 1 }
           
       - name: Deploy file to Tomcat
         run: |
               # Define the Tomcat webapps directory and WAR file path
               $TOMCAT_WEBAPPS_DIR = "C:\apache-tomcat-10.1.13\webapps"  # Path to the Tomcat webapps directory
-              $WAR_FILE_PATH = "$TOMCAT_WEBAPPS_DIR\mywebapp.war"  # Path to your WAR file
+              $WAR_FILE_PATH = "$TOMCAT_WEBAPPS_DIR\myapp.war"  # Path to your WAR file
               
               # No need to copy the WAR file again; it's already in the webapps directory
               Write-Host "Deployment successful."
