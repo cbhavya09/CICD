@@ -31,8 +31,8 @@ jobs:
       - name: Extract artifact
         run: Expand-Archive -Path "C:\Users\c.bhavya\Desktop\demo\demo\actions-runner\_work\cicd\cicd\mywebapp.zip" -DestinationPath "C:\apache-tomcat-10.1.13\webapps"
 
-      - name: Copy WAR file to Tomcat webapps
-        run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\cicd\target\myapp.war" -Destination "C:\apache-tomcat-10.1.13\webapps"
+     # - name: Copy WAR file to Tomcat webapps
+     #   run: Copy-Item -Path "C:\Users\c.bhavya\Desktop\cicd\cicd\target\myapp.war" -Destination "C:\apache-tomcat-10.1.13\webapps"
 
       - name: Set up Tomcat
         run: |
