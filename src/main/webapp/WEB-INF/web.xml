@@ -6,12 +6,12 @@
 
     <!-- Servlet Configuration -->
     <servlet>
-        <servlet-name>myapp</servlet-name>
+        <servlet-name>HelloWorldServlet</servlet-name>
         <servlet-class>com.example.HelloWorldServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>myapp</servlet-name>
+        <servlet-name>HelloWorldServlet</servlet-name>
         <url-pattern>/myapp</url-pattern>
     </servlet-mapping>
 

@@ -27,7 +27,7 @@ jobs:
 
       - name: Download artifact
         run: |
-          gh release download v5.2.1 -p "my-java-app.zip" --repo cbhavya09/cicd
+          gh release download v5.3.1 -p "my-java-app.zip" --repo cbhavya09/cicd
 
       - name: Extract artifact
         run: Expand-Archive -Path "C:\Users\c.bhavya\Desktop\demo\demo\actions-runner\_work\cicd\cicd\my-java-app.zip" -DestinationPath "C:\Users\c.bhavya\Desktop\cicd\cicd\my-java-app"
