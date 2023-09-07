@@ -38,6 +38,7 @@ jobs:
         run: |
           $env:TOMCAT_HOME = "C:\apache-tomcat-10.1.13"
           $env:PATH = "$env:PATH;$env:TOMCAT_HOME\bin"
+          
       - name: Check if Tomcat is running
         run: |
           $tomcatRunning = Test-NetConnection -ComputerName "localhost" -Port 8080

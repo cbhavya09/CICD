@@ -1,47 +1,44 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
     <groupId>com.example</groupId>
-    <artifactId>my-web-app</artifactId>
-    <version>1.0.0</version>
-    <packaging>war</packaging> <!-- Packaging type is WAR -->
+    <artifactId>mywebapp</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
 
-    <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
+  <artifactId>myapp</artifactId>
+  <packaging>war</packaging>
+  <name>Myapp</name>
+  <description>Myapp.</description>
 
-    <dependencies>
-        <!-- Servlet API -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>4.0.1</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
+  <build>
+    <finalName>${project.artifactId}</finalName>
 
-    <build>
-        <plugins>
-            <!-- Configure the Maven War Plugin to build the WAR file -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>3.2.2</version>
-                <configuration>
-                    <!-- Name of the WAR file (optional) -->
-                    <warName>myapp</warName>
-                    <!-- Location of web resources (e.g., JSPs) -->
-                    <webResources>
-                        <resource>
-                            <directory>src/main/webapp</directory>
-                        </resource>
-                    </webResources>
-                    <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
-                    <!-- Context path matching the WAR file name -->
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>>maven-war-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.servlet.jsp</groupId>
+      <artifactId>jsp-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
 </project>
