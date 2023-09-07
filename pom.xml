@@ -22,7 +22,6 @@
         <!-- Other dependencies -->
     </dependencies>
 
-
     <build>
         <plugins>
             <!-- Configure the Maven War Plugin to build the WAR file -->
