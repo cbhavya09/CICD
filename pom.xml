@@ -30,7 +30,6 @@
                 <version>3.2.2</version>
                 <configuration>
                     <!-- Name of the WAR file (optional) -->
-                    <warName>myapp</warName>
                     <!-- Location of web resources (e.g., JSPs) -->
                     <webResources>
                         <resource>
