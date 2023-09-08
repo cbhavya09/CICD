@@ -1,19 +1,14 @@
 package com.example;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter; // Add this import statements
 
+@WebServlet("/hello")
 public class HelloWorldServlet extends HttpServlet {
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-        out.println("<html>");
-        out.println("<head><title>Hello World</title></head>");
-        out.println("<body>");
-        out.println("<h1>Hello, World!</h1>");
-        out.println("</body></html>");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.getWriter().write("Hello, World!");
     }
 }
