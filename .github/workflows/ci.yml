@@ -24,7 +24,7 @@ jobs:
       - name: Package the artifact
         run: |
           $outputPath = "myapp.zip"
-          $sourcePath = "C:\Users\c.bhavya\Desktop\cicd\cicd\target\myapp-1.0.0.war"
+          $sourcePath = "C:\Users\c.bhavya\Desktop\cicd\cicd\target\myapp-1.war"
           Compress-Archive -Path $sourcePath -DestinationPath $outputPath
           
       - name: Authenticate with GitHub

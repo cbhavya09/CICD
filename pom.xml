@@ -5,10 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.example</groupId>
     <artifactId>myapp</artifactId>
-    <version>1.0.0</version>
+    <version>1</version>
     <packaging>war</packaging>
-    <name>Myapp</name>
-    <description>Myapp - HelloWorld Web Application</description>
 
     <build>
       <plugins>
