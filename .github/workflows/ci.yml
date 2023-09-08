@@ -23,8 +23,8 @@ jobs:
 
       - name: Package the artifact
         run: |
-          $outputPath = "mywebapp.zip"
-          $sourcePath = "C:\Users\c.bhavya\Desktop\cicd\cicd\target\my-web-app-1.0.0"
+          $outputPath = "myapp.zip"
+          $sourcePath = "C:\Users\c.bhavya\Desktop\cicd\cicd\target\myapp-1.0.0"
           Compress-Archive -Path $sourcePath -DestinationPath $outputPath
           
       - name: Authenticate with GitHub
@@ -34,6 +34,6 @@ jobs:
     
       - name: Publish the artifact to GitHub release
         run: |
-          gh release create v6.1.1 mywebapp.zip
+          gh release create v6.2.1 myapp.zip
         env:
           GH_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
